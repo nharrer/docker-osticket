@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.3
 
-FROM php:8.1-fpm-alpine3.16
+FROM php:8.1-fpm-alpine3.18
 RUN set -ex; \
     \
     export CFLAGS="-Os"; \
@@ -17,6 +17,7 @@ RUN set -ex; \
         msmtp \
         nginx \
         openldap \
+        openssl \
         runit \
     ; \
     \
@@ -29,6 +30,7 @@ RUN set -ex; \
         libpng-dev \
         libzip-dev \
         openldap-dev \
+        openssl-dev \
     ; \
     \
     # Install PHP extensions
