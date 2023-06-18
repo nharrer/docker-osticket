@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.3
 
-FROM php:8.1-fpm-alpine3.18
+FROM php:8.2-fpm-alpine3.18
 RUN set -ex; \
     \
     export CFLAGS="-Os"; \
@@ -29,6 +29,7 @@ RUN set -ex; \
         imap-dev \
         libpng-dev \
         libzip-dev \
+        linux-headers \
         openldap-dev \
         openssl-dev \
     ; \
