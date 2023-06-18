@@ -3,7 +3,7 @@ docker-osticket
 
 # Introduction
 
-Docker image for running version 1.17 of [osTicket](http://osticket.com/).
+Docker image for running version 1.18 of [osTicket](http://osticket.com/).
 
 **Important! If upgrading from images <1.17.0, read the upgrade instructions below, as images 1.17.0
 and later have plugin-related breaking changes.**
