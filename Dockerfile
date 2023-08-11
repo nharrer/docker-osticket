@@ -63,9 +63,7 @@ RUN set -ex; \
 # DO NOT FORGET TO UPDATE "image-version" FILE
 ENV OSTICKET_VERSION=1.17.4 \
     OSTICKET_SHA256SUM=59a08586e5af5b7235edd2c02bb7b55d80dabe2c54f7ed22754139147b87e881
-RUN --mount=type=bind,source=utils/verify-plugin.php,target=/tmp/verify-plugin.php,readonly \
-    \
-    set -ex; \
+RUN set -ex; \
     \
     wget -q -O osTicket.zip https://github.com/osTicket/osTicket/releases/download/\
 v${OSTICKET_VERSION}/osTicket-v${OSTICKET_VERSION}.zip; \
@@ -77,9 +75,10 @@ v${OSTICKET_VERSION}/osTicket-v${OSTICKET_VERSION}.zip; \
     # Hard link the sources to the public directory
     cp -al /usr/local/src/osticket/. /var/www/html; \
     # Hide setup
-    rm -r /var/www/html/setup; \
+    rm -r /var/www/html/setup
+RUN --mount=type=bind,source=utils/verify-plugin.php,target=/tmp/verify-plugin.php,readonly \
     \
-    cd /var/www/html; \
+    set -ex; \
     \
     for lang in bg bn bs ca cs da de el es_AR es_ES es_MX et eu fa fi fr gl he hi hr hu id is it \
         ja ka km ko lt lv mk mn ms nl no pl pt_BR pt_PT ro ru sk sl sq sr sr_CS sv_SE sw th tr uk \
