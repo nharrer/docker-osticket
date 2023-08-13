@@ -1,35 +1,49 @@
 # syntax=docker/dockerfile:1.3
 
-FROM php:8.1-fpm-alpine3.16
-RUN set -ex; \
+FROM php:8.1-fpm-alpine3.16 AS base
+ENV OSTICKET_RUNTIME_DEPS \
+    c-client \
+    icu \
+    libintl \
+    libpng \
+    libzip \
+    msmtp \
+    nginx \
+    openldap \
+    runit
+ENV OSTICKET_BUILD_DEPS \
+    ${PHPIZE_DEPS} \
+    gettext-dev \
+    icu-dev \
+    imap-dev \
+    libpng-dev \
+    libzip-dev \
+    openldap-dev
+ENV OSTICKET_PECL_DEPS \
+    apcu
+
+FROM base AS versions
+RUN set -exo pipefail; \
+    \
+    apk add -s --no-cache ${OSTICKET_RUNTIME_DEPS} ${OSTICKET_BUILD_DEPS} \
+        | grep -o '[^ ]* (.*)' > /versions.txt; \
+    pecl install -p ${OSTICKET_PECL_DEPS} >> /versions.txt; \
+    sort -o /versions.txt /versions.txt
+
+FROM base
+RUN --mount=type=bind,from=versions,source=/versions.txt,target=/versions.txt \
+    \
+    set -ex; \
     \
     export CFLAGS="${PHP_CFLAGS:?}"; \
     export CPPFLAGS="${PHP_CPPFLAGS:?}"; \
     export LDFLAGS="${PHP_LDFLAGS:?} -Wl,--strip-all"; \
     \
     # Runtime dependencies
-    apk add --no-cache \
-        c-client \
-        icu \
-        libintl \
-        libpng \
-        libzip \
-        msmtp \
-        nginx \
-        openldap \
-        runit \
-    ; \
+    apk add --no-cache ${OSTICKET_RUNTIME_DEPS}; \
     \
     # Build dependencies
-    apk add --no-cache --virtual .build-deps \
-        ${PHPIZE_DEPS} \
-        gettext-dev \
-        icu-dev \
-        imap-dev \
-        libpng-dev \
-        libzip-dev \
-        openldap-dev \
-    ; \
+    apk add --no-cache --virtual .build-deps ${OSTICKET_BUILD_DEPS}; \
     \
     # Install PHP extensions
     docker-php-ext-configure imap --with-imap-ssl; \
@@ -43,7 +57,7 @@ RUN set -ex; \
         sockets \
         zip \
     ; \
-    pecl install apcu; \
+    pecl install ${OSTICKET_PECL_DEPS}; \
     docker-php-ext-enable \
         apcu \
         opcache \
