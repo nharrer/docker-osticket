@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.3
 
-FROM php:8.1-fpm-alpine3.16
+FROM php:8.2-fpm-alpine3.18
 RUN set -ex; \
     \
     export CFLAGS="${PHP_CFLAGS:?}"; \
@@ -17,6 +17,7 @@ RUN set -ex; \
         msmtp \
         nginx \
         openldap \
+        openssl \
         runit \
     ; \
     \
@@ -28,7 +29,9 @@ RUN set -ex; \
         imap-dev \
         libpng-dev \
         libzip-dev \
+        linux-headers \
         openldap-dev \
+        openssl-dev \
     ; \
     \
     # Install PHP extensions
@@ -61,8 +64,8 @@ RUN set -ex; \
     rm -rf /tmp/pear /var/cache/apk/*
 # DO NOT FORGET TO CHECK THE LANGUAGE PACK DOWNLOAD URL BELOW
 # DO NOT FORGET TO UPDATE "image-version" FILE
-ENV OSTICKET_VERSION=1.17.5 \
-    OSTICKET_SHA256SUM=a9d64b67008c64ae2009ee8abda7354c34ff4486666f931d3012988dd6538bc9
+ENV OSTICKET_VERSION=1.18 \
+    OSTICKET_SHA256SUM=c0c3ef4220b8709e1dbe12503294d412390e91d638e8c6d57ab8d8403c5753e1
 RUN --mount=type=bind,source=utils/verify-plugin.php,target=/tmp/verify-plugin.php,readonly \
     \
     set -ex; \
@@ -84,8 +87,9 @@ v${OSTICKET_VERSION}/osTicket-v${OSTICKET_VERSION}.zip; \
     for lang in bg bn bs ca cs da de el es_AR es_ES es_MX et eu fa fi fr gl he hi hr hu id is it \
         ja ka km ko lt lv mk mn ms nl no pl pt_BR pt_PT ro ru sk sl sq sr sr_CS sv_SE sw th tr uk \
         ur_IN ur_PK vi zh_CN zh_TW; do \
-        # This URL is the same as what is used by the official osTicket Downloads page. This URL is
-        # used even for minor versions >= 14.
+        # Language packs from https://s3.amazonaws.com/downloads.osticket.com/lang/1.17.x/ (used by
+        # the official osTicket Downloads page) cannot be authenticated. See:
+        # https://github.com/osTicket/osTicket/issues/6377
         wget -q -O /var/www/html/include/i18n/${lang}.phar \
             https://s3.amazonaws.com/downloads.osticket.com/lang/1.14.x/${lang}.phar; \
         php /tmp/verify-plugin.php "/var/www/html/include/i18n/${lang}.phar"; \

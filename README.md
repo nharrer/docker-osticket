@@ -3,7 +3,7 @@ docker-osticket
 
 # Introduction
 
-Docker image for running version 1.17 of [osTicket](http://osticket.com/).
+Docker image for running version 1.18 of [osTicket](http://osticket.com/).
 
 **Important! If upgrading from images <1.17.0, read the upgrade instructions below, as images 1.17.0
 and later have plugin-related breaking changes.**
@@ -22,7 +22,7 @@ It has a few modifications:
   * EMail support
 
 osTicket is being served by [nginx](http://wiki.nginx.org/Main) using
-[PHP-FPM](http://php-fpm.org/) with PHP 8.1.
+[PHP-FPM](http://php-fpm.org/) with PHP 8.2.
 PHP [mail](http://php.net/manual/en/function.mail.php) function is configured to use
 [msmtp](http://msmtp.sourceforge.net/) to send out-going messages.
 
