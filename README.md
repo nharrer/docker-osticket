@@ -1,6 +1,15 @@
 docker-osticket
 ===============
 
+Special Build
+=============
+
+This is a fork of [devinsolutions/docker-osticket](https://github.com/devinsolutions/docker-osticket) with following changes:
+
+* Bumped version to osTicket v1.18.1.
+* Added `Dockerfile.debug` for building a debug version which enables php xdebug and extended logging.
+* Patched `class.mailer.php` to add a BCC mail header to all outgoing mails.
+
 # Introduction
 
 Docker image for running version 1.18.1 of [osTicket](http://osticket.com/).
