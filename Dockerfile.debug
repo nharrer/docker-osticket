@@ -46,10 +46,11 @@ RUN set -ex; \
         sockets \
         zip \
     ; \
-    pecl install apcu; \
+    pecl install apcu xdebug; \
     docker-php-ext-enable \
         apcu \
         opcache \
+        xdebug \
     ; \
     \
     # Create msmtp log
@@ -117,6 +118,7 @@ osTicket-slack-plugin/archive/${OSTICKET_SLACK_VERSION}.tar.gz; \
         osTicket-slack-plugin-${OSTICKET_SLACK_VERSION}/slack; \
     rm osTicket-slack-plugin.tar.gz
 COPY root /
+COPY root-debug /
 ENV ENV=/etc/profile
 CMD ["start"]
 STOPSIGNAL SIGTERM

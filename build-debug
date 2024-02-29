@@ -1,0 +1,2 @@
+docker build -t nharrer/osticket-debug:1.18.1 -f Dockerfile.debug .
+
